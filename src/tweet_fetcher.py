@@ -1,9 +1,10 @@
 import tweepy
 import pymysql
 from textblob import TextBlob
+import os
 
 # Twitter bearer token
-bearer_token = "AAAAAAAAAAAAAAAAAAAAADhnvgEAAAAAqurcrXsXDnIDOqsEI2bKDb0rZKg%3DGKzj0ajaVU4zZQMquRx4AMZLZoHukehX3RTxD1dwaeZk3sUJJi"
+bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
 
 # MySQL Database connection
 connection = pymysql.connect(
