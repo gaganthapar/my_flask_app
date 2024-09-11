@@ -1,19 +1,26 @@
-#!/usr/bin/env python3
-
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from tweet_fetcher import fetch_and_process_tweets
 
 app = Flask(__name__)
+
 
 @app.route("/")
 def main():
     return '''
-     <form action="/echo_user_input" method="POST">
-         <input name="user_input">
-         <input type="submit" value="Submit!">
-     </form>
-     '''
+        <form action="/fetch_tweets" method="POST">
+            <label>Search for tweets: </label>
+            <input name="query" placeholder="Enter a keyword" required />
+            <input type="submit" value="Fetch and Analyze Tweets" />
+        </form>
+    '''
 
-@app.route("/echo_user_input", methods=["POST"])
-def echo_input():
-    input_text = request.form.get("user_input", "")
-    return "You entered: " + input_text
+
+@app.route("/fetch_tweets", methods=["POST"])
+def fetch_tweets():
+    query = request.form.get("query")
+    result = fetch_and_process_tweets(query)
+    return f"<p>{result}</p>"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
