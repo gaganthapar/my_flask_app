@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from tweet_fetcher import fetch_and_process_tweets
+from src.tweet_fetcher import fetch_and_process_tweets
 
 app = Flask(__name__)
 
