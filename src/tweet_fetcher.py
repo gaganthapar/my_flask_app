@@ -1,5 +1,4 @@
 import tweepy
-import pymysql
 from textblob import TextBlob
 import psycopg2
 from urllib.parse import urlparse
