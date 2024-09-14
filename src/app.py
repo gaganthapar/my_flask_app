@@ -5,9 +5,13 @@ import os
 
 app = Flask(__name__)
 
+uri = os.getenv("DATABASE_URL")
+# Replace the 'postgres://' scheme with 'postgresql://'
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
 # Configure PostgreSQL Database URI
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.getenv("DATABASE_URL", "postgresql://localhost/news_db"))
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
