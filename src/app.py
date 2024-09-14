@@ -15,10 +15,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
+
 # Create database tables
-@app.before_first_request
-def create_tables():
+#@app.before_first_request
+with app.app_context():
     db.create_all()
+
 
 # Fetch news articles and save to the database
 @app.route('/fetch_news', methods=['GET'])
@@ -43,6 +45,7 @@ def fetch_news():
         return jsonify({"message": "News articles fetched and saved successfully", "data": articles}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
