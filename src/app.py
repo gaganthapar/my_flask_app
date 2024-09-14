@@ -3,6 +3,7 @@ from src.models import db, NewsArticle
 from src.news_fetcher import fetch_and_process_news
 import os
 
+
 app = Flask(__name__)
 
 uri = os.getenv("DATABASE_URL")
@@ -16,10 +17,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 
+
 # Create database tables
 #@app.before_first_request
 with app.app_context():
-    db.create_all()
+    if not db.engine.dialect.has_table(db.engine, 'news_articles'):
+        db.create_all()
 
 
 # Fetch news articles and save to the database
