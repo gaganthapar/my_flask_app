@@ -21,8 +21,8 @@ db.init_app(app)
 # Create database tables
 #@app.before_first_request
 with app.app_context():
-    if not db.engine.dialect.has_table(db.engine, 'news_articles'):
-        db.create_all()
+    #if not db.engine.dialect.has_table(db.engine, 'news_articles'):
+    db.create_all()
 
 
 # Fetch news articles and save to the database
