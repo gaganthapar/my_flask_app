@@ -1,37 +1,32 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from src.models import db, NewsArticle
 from src.news_fetcher import fetch_and_process_news
 import os
 
-
 app = Flask(__name__)
 
 uri = os.getenv("DATABASE_URL")
-# Replace the 'postgres://' scheme with 'postgresql://'
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 
-# Configure PostgreSQL Database URI
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-
-
-# Create database tables
-#@app.before_first_request
 with app.app_context():
-    #if not db.engine.dialect.has_table(db.engine, 'news_articles'):
     db.create_all()
 
 
-# Fetch news articles and save to the database
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
 @app.route('/fetch_news', methods=['GET'])
 def fetch_news():
     try:
         articles = fetch_and_process_news()
 
-        # Save articles to the database, skipping duplicates
         for article in articles:
             if not NewsArticle.query.filter_by(url=article["url"]).first():
                 news_article = NewsArticle(
