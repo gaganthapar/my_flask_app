@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
-from models import db, NewsArticle
-from news_fetcher import fetch_and_process_news
+from src.models import db, NewsArticle
+from src.news_fetcher import fetch_and_process_news
 import os
 
 app = Flask(__name__)
