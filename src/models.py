@@ -9,7 +9,7 @@ class NewsArticle(db.Model):
     title = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(255), nullable=False, unique=True)
     source = db.Column(db.String(100), nullable=False)
-    sentiment = db.Column(db.Float, nullable=False)
+    sentiment = db.Column(db.String(50), nullable=False)
     published_at = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title, url, source, sentiment, published_at):
