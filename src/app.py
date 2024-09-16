@@ -1,18 +1,11 @@
 from flask import Flask, jsonify, render_template
 from src.models import db, NewsArticle
 from src.news_fetcher import fetch_and_process_news
+from src.message_queue import send_to_queue, receive_from_queue
 import os
 
 app = Flask(__name__)
-
-print("Current working directory:", os.getcwd())
-
-uri = os.getenv("DATABASE_URL")
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object('src.config.Config')
 db.init_app(app)
 
 with app.app_context():
@@ -28,7 +21,6 @@ def home():
 def fetch_news():
     try:
         articles = fetch_and_process_news()
-
         for article in articles:
             if not NewsArticle.query.filter_by(url=article["url"]).first():
                 news_article = NewsArticle(
@@ -39,13 +31,11 @@ def fetch_news():
                     published_at=article["published_at"]
                 )
                 db.session.add(news_article)
-
-        db.session.commit()
-
+                db.session.commit()
         return jsonify({"message": "News articles fetched and saved successfully", "data": articles}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

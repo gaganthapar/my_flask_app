@@ -5,7 +5,6 @@ db = SQLAlchemy()
 
 class NewsArticle(db.Model):
     __tablename__ = 'news_articles'
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(255), nullable=False, unique=True)
