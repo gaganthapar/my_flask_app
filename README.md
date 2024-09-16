@@ -37,3 +37,5 @@ Run the application:
 
 flask run
 
+There's a messaging queue placed between the request and the news fetcher. One more queue is placed between fetching the data and storing the data into database.
+
