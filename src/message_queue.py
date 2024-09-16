@@ -1,8 +1,7 @@
 import pika
 import os
 
-RABBITMQ_URL = os.getenv('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672/')
-
+RABBITMQ_URL = os.getenv('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/')
 
 def get_connection():
     return pika.BlockingConnection(pika.URLParameters(RABBITMQ_URL))
