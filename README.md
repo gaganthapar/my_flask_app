@@ -1,6 +1,6 @@
 Overview:
 
-This project fetches news articles from an external source and saves them to the database after doing sentiment analysis. The application is built using Flask for the backend.
+This project fetches news articles from an external source and saves them to the database after doing sentiment analysis. The application is built using Flask for the backend. This app is deployed on Heroku
 
 Requirements:
 
@@ -15,7 +15,8 @@ DATABASE_URL=postgresql://username:password@localhost:5432/news_fetcher_db
 
 Initialize the database:
 
-# Connect to your database and create the database if it doesn't exist
+Connect to your database and create the database if it doesn't exist
+
 psql -U username -c "CREATE DATABASE news_fetcher_db;"
 
 Apply migrations:
