@@ -16,15 +16,6 @@ def fetch_tennis_news():
         raise Exception(f"Error fetching news: {response.status_code}")
 
 
-def categorize_sentiment(score):
-    """Categorize the sentiment score into positive, neutral, or negative."""
-    if score > 0.1:
-        return "positive"
-    elif score < -0.1:
-        return "negative"
-    else:
-        return "neutral"
-
 
 def analyze_sentiment(content):
     blob = TextBlob(content)
@@ -43,7 +34,6 @@ def fetch_and_process_news():
         source_name = article.get("source", {}).get("name", "Unknown")
         published_at = article.get("publishedAt", "")
         sentiment_score = analyze_sentiment(content)
-        sentiment_category = categorize_sentiment(sentiment_score)
 
         processed_articles.append({
             "title": title,

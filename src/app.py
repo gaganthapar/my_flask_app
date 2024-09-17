@@ -20,6 +20,16 @@ with app.app_context():
     db.create_all()
 
 
+def categorize_sentiment(score):
+    """Categorize the sentiment score into positive, neutral, or negative."""
+    if score > 0.1:
+        return "positive"
+    elif score < -0.1:
+        return "negative"
+    else:
+        return "neutral"
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -43,29 +53,40 @@ def fetch_news():
             "title": article.title,
             "url": article.url,
             "source": article.source,
-            "sentiment": article.sentiment,
+            "sentiment_score": article.sentiment,  # This should still store the float score
+            "sentiment_category": categorize_sentiment(article.sentiment),  # Categorize for display
             "published_at": article.published_at
         } for article in db_articles]
 
         return jsonify({"message": "No new articles found, displaying database articles.", "data": db_articles}), 200
 
-    # Save new articles to the database
+    # Process and save new articles
+    processed_articles = []
     for article in new_articles:
+        sentiment_category = categorize_sentiment(article["sentiment_score"])  # Categorize for new articles
         if not NewsArticle.query.filter_by(url=article["url"]).first():
             news_article = NewsArticle(
                 title=article["title"],
                 url=article["url"],
                 source=article["source"],
-                sentiment=article["sentiment"],
+                sentiment=article["sentiment_score"],  # Store the float score
                 published_at=article["published_at"]
             )
             db.session.add(news_article)
 
+        # Add processed article with sentiment category to the list
+        processed_articles.append({
+            "title": article["title"],
+            "url": article["url"],
+            "source": article["source"],
+            "sentiment_score": article["sentiment_score"],
+            "sentiment_category": sentiment_category,  # Categorize for display
+            "published_at": article["published_at"]
+        })
+
     db.session.commit()
 
-    return jsonify({"message": "News articles fetched and saved successfully", "data": new_articles}), 200
-
-
+    return jsonify({"message": "News articles fetched and saved successfully", "data": processed_articles}), 200
 
 
 if __name__ == '__main__':
