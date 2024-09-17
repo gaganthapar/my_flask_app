@@ -49,7 +49,7 @@ def fetch_and_process_news():
             "title": title,
             "url": url,
             "source": source_name,
-            "sentiment": sentiment_category,  # Use category instead of score
+            "sentiment": sentiment_score,  # Use category instead of score
             "published_at": published_at
         })
 
