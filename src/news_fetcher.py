@@ -9,6 +9,7 @@ NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 def fetch_tennis_news():
     url = f"https://newsapi.org/v2/everything?q=tennis&language=en&apiKey={NEWS_API_KEY}"
     response = requests.get(url)
+    print(f"Response from News API: {response.json()}")
     if response.status_code == 200:
         return response.json()
     else:
