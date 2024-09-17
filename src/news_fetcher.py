@@ -2,12 +2,19 @@ import requests
 from textblob import TextBlob
 import os
 from src.message_queue import send_to_queue
+from datetime import datetime, timedelta
+
 
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 
 
 def fetch_tennis_news():
-    url = f"https://newsapi.org/v2/everything?q=tennis&language=en&apiKey={NEWS_API_KEY}"
+
+    from_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+    to_date = datetime.now().strftime('%Y-%m-%d')
+
+    url = f"https://newsapi.org/v2/everything?q=tennis&language=en&from={from_date}&to={to_date}&apiKey={NEWS_API_KEY}"
+
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
